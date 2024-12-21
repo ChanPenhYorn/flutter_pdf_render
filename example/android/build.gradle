@@ -1,32 +1,29 @@
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.9.10'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.1.0' // Update to a version that supports SDK 34
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 allprojects {
-    repositories {
-        google()
-        mavenCentral()
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs).configureEach {
+        kotlinOptions.jvmTarget = "1.8"
     }
 }
-
 rootProject.buildDir = '../build'
 
-android {
-    namespace 'jp.espresso3389.pdf_render'
-}
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(':app')
 }
 
